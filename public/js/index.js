@@ -10,9 +10,10 @@ socket.on('disconnect', function () {
 
 socket.on('newMessage', function (msg) {
   console.log('New message', msg);
+  let formattedTime = moment(msg.createdAt).format('h:mm a');
 
   let li = jQuery('<li></li>');
-  li.text(`${msg.from}: ${msg.text}`);
+  li.text(`${msg.from}: ${formattedTime}: ${msg.text}`);
 
   jQuery('#messages').append(li);
 });
@@ -24,15 +25,16 @@ socket.on('newMessage', function (msg) {
 //   console.log('Got it', data);
 // });
 
-socket.on('newLocationMessage', function (message) {
-let li = jQuery('<li></li>');
-let a = jQuery('<a target="_blank" rel="noopener">My current location</a>')
-console.log(message);
+socket.on('newLocationMessage', function (msg) {
+  let formattedTime = moment(msg.createdAt).format('h:mm a');
+  let li = jQuery('<li></li>');
+  let a = jQuery('<a target="_blank" rel="noopener">My current location</a>')
+  console.log(msg);
 
-li.text(`${message.from}: `);
-a.attr('href', message.url);
-li.append(a);
-jQuery('#messages').append(li);
+  li.text(`${msg.from}: ${formattedTime} `);
+  a.attr('href', msg.url);
+  li.append(a);
+  jQuery('#messages').append(li);
 });
 
 jQuery('#message-form').on('submit', function (e) {
